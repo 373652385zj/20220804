@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-08-04 14:15:22
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-08-04 16:22:47
+ * @LastEditTime: 2022-08-10 16:22:57
  * @FilePath: /person/20220804/src/views/Login.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -53,9 +53,16 @@ export default {
         })
         .then((res) => {
           if (res.data.code === 666) {
-            this.$store.state.isLogin = true;
-            this.$store.commit("setUserInfo", res.data.data)
-            this.$router.push({ path: "/home" });
+            if (res.data.data.role === "merchants") {
+              this.$store.state.isLogin = true;
+              this.$store.commit("setUserInfo", res.data.data)
+              this.$router.push({ path: "/home" });
+            } else {
+              if (this.$route.path !== "/") {
+                this.$router.push({ path: "/" });
+              }
+              this.$message('权限不足')
+            }
           }
         })
         .catch((err) => {

@@ -2,7 +2,7 @@
  * @Author: 张泽基 m15105958776_1@163.com
  * @Date: 2022-08-04 10:07:47
  * @LastEditors: 张泽基 m15105958776_1@163.com
- * @LastEditTime: 2022-08-05 15:36:19
+ * @LastEditTime: 2022-08-09 16:21:02
  * @FilePath: /person/20220804/src/views/About.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -19,9 +19,14 @@
       stripe
       style="width: 100%">
       <el-table-column
-        type="index"
+        prop="id"
         label="序号"
-        width="50">
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="tableNo"
+        label="所属表格"
+        width="100">
       </el-table-column>
       <el-table-column
         prop="addressName"
@@ -35,15 +40,23 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        label="地址">
+        label="地址"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="detailAddress"
-        label="详细地址">
+        label="详细地址"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="dateTime"
+        label="提交时间"
+        width="180">
       </el-table-column>
       <el-table-column
         prop="productContent"
-        label="发货内容">
+        label="发货内容"
+        width="180">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -64,9 +77,20 @@
       stripe
       style="width: 100%;">
       <el-table-column
-        type="index"
+        prop="id"
         label="序号"
-        width="50">
+        width="180">
+        <template slot-scope="scope">
+          （{{scope.row.id}}）
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="tableNo"
+        label="所属表格"
+        width="180">
+        <template slot-scope="scope">
+          （{{scope.row.tableNo}}）
+        </template>
       </el-table-column>
       <el-table-column
         prop="addressName"
@@ -77,6 +101,9 @@
         prop="addressPhone"
         label="电话"
         width="180">
+        <template slot-scope="scope">
+          （{{scope.row.addressPhone}}）
+        </template>
       </el-table-column>
       <el-table-column
         prop="address"
@@ -85,6 +112,17 @@
       <el-table-column
         prop="detailAddress"
         label="详细地址">
+      </el-table-column>
+      <el-table-column
+        prop="dateTime"
+        label="提交时间">
+        <template slot-scope="scope">
+          （{{scope.row.dateTime}}）
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="productContent"
+        label="发货内容">
       </el-table-column>
     </el-table>
 
@@ -107,6 +145,9 @@
       width="60%"
       :before-close="closeDialogForm">
       <el-form ref="dialogForm" :model="form" label-width="100px">
+        <el-form-item label="所属表格">
+          <el-input v-model="form.tableNo"></el-input>
+        </el-form-item>
         <el-form-item label="姓名">
           <el-input v-model="form.addressName"></el-input>
         </el-form-item>
@@ -118,6 +159,9 @@
         </el-form-item>
         <el-form-item label="详细地址">
           <el-input v-model="form.detailAddress"></el-input>
+        </el-form-item>
+        <el-form-item label="提交时间">
+          <el-input v-model="form.dateTime" disabled></el-input>
         </el-form-item>
         <el-form-item label="发货内容">
           <el-input v-model="form.productContent"></el-input>
@@ -137,10 +181,13 @@
       return {
         tableData: [],
         form: {
+          id: '',
+          tableNo: '',
           addressName: '',
           addressPhone: '',
           address: '',
           detailAddress: '',
+          dateTime: '',
           productContent: '默认发货两颗柚子（一红一白）'
         },
         dialog: {
@@ -255,7 +302,8 @@
               addressName: this.form.addressName,
               addressPhone: this.form.addressPhone,
               address: this.form.address,
-              detailAddress: this.form.detailAddress
+              detailAddress: this.form.detailAddress,
+              productContent: this.form.productContent
             })
             .then((res) => {
               console.log(res);
